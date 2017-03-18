@@ -1,0 +1,59 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        title 
+            block title
+                | GTI619 - Lab 05
+        // Import Google Icon Font
+        link(href='http://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+        // Import materialize.css
+        link(type='text/css', rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css', media='screen,projection')
+        link(type='text/css', rel='stylesheet', href='/css/site.css', media='screen,projection')
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/tomorrow.min.css')
+        // Let browser know website is optimized for mobile
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    body
+        nav.blue-grey.lighten-1(role='navigation')
+            .nav-wrapper.container
+                a#logo-container.brand-logo(href='/') GTI619 - Lab 05
+                ul.right.hide-on-med-and-down
+                    li
+                        a(href='/') Home
+                ul#nav-mobile.side-nav(style='transform: translateX(-100%);')
+                    li
+                        a(href='/') Home
+                a.button-collapse(href='#', data-activates='nav-mobile')
+                    i.material-icons menu
+        main#index-banner.section.no-pad-bot
+            .container
+                .card-panel
+                    block content
+        footer.page-footer.blue-grey.lighten-1
+            .footer-copyright
+                .container
+                    block footer
+                        | Made by 
+                        a.blue-grey-text.text-lighten-3(href='http://materializecss.com') Materialize
+
+        script(type='text/javascript', src='https://code.jquery.com/jquery-2.1.1.min.js')
+        script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js')
+        script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js')
+        script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/languages/javascript.min.js')
+        script.
+            (function($){
+              $(function(){
+
+                $('.button-collapse').sideNav({draggable: true});
+
+              }); // end of document ready
+            })(jQuery); // end of jQuery name space
+        style.
+            body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            }
+            main {
+            flex: 1 0 auto;
+            }

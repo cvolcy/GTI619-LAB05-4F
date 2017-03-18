@@ -1,0 +1,33 @@
+{
+  "name": "gti619-lab05",
+  "version": "1.0.0",
+  "description": "Laboratoire 05 du cours GTI619",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gti619",
+    "ets",
+    "etsmtl",
+    "passport",
+    "security",
+    "laboratoire",
+    "5"
+  ],
+  "author": "Équipe 4f",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "express-session": "^1.15.1",
+    "mongoose": "^4.9.0",
+    "morgan": "^1.8.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.0-beta11"
+  }
+}
