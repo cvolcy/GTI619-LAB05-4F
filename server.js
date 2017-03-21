@@ -22,7 +22,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.set('view engine', 'pug');
+app.set('view engine', 'ejs');
 
 app.use(session({ secret: process.env.SECRET || 'secret', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
