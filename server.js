@@ -6,7 +6,8 @@ const http 	 = require('http'), // Http for the moment use let's encrypt certifi
 	  morgan     = require('morgan'),
 	  cookieParser = require('cookie-parser'),
 	  bodyParser = require('body-parser'),
-	  session    = require('express-session');
+	  session    = require('express-session'),
+	  path			 = require('path');
 
 // MongoDB setup
 mongoose.connect("mongodb://heroku_gfvkrw47:8o4868opmpueu9i8b2r9joj5qk@ds021182.mlab.com:21182/heroku_gfvkrw47");
@@ -23,6 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
+app.use(express.static(path.resolve(__dirname, 'static')));
 
 app.use(session({ secret: process.env.SECRET || 'secret', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
