@@ -30,6 +30,7 @@ app.use(passport.session());
 
 // Routers
 app.use('/', require('./app/routes/home.js'));
+app.use('/repertoire', require('./app/routes/repertoire.js'));
 
 let secureServer = http.createServer(app).listen(process.env.PORT || 8080, () => {
 	let addr = secureServer.address();
