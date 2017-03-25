@@ -1,8 +1,13 @@
-//ne marche pas je l;ai mis dans le meme repertoire que la rouet auth
+const express = require('express'),
+      passport = require('passport'),
+      LocalStrategy = require('passport-local').Strategy,
+      mongoose = require('mongoose');
 
-var passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy,
-    mongoose = require('mongoose');
+let router = express.Router();
+
+router.get("/signin", (req, res, next) => {
+  res.render('signin');
+});
 
 // used to serialize the user
 passport.serializeUser(function(user, done) {
@@ -28,5 +33,15 @@ passport.use(new LocalStrategy(function(username, password, done) {
       }
       return done(null, user);
     });
+    // var User = mongoose.model('User');
+    // var user = new User({ username : username, password : password})
+    // return done(null, user);
   }
 ));
+
+router.post('/signin', passport.authenticate('local', {
+	successRedirect : '/repertoire/residentiel', //pour tester
+  failureRedirect : '/auth/signin'
+}));
+
+module.exports = router;
