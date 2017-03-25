@@ -23,4 +23,8 @@ userSchema.pre('save', function(next) {
   next();
 });
 
+userSchema.query.byName = function(name) {
+  return this.find({ name: new RegExp(name, 'i') });
+};
+
 mongoose.model('User', userSchema);
