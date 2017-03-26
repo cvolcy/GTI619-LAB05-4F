@@ -9,11 +9,12 @@ let userSchema = new mongoose.Schema({
   updated_at: {type: Date, default: Date.now},
 });
 
-userSchema.methods.hashPassword = (password, salt) => {
+userSchema.methods.hashPassword = (password) => {
+  let salt = bcrypt.genSaltSync(10);
   return bcrypt.hashSync(password, salt);
 }
 
-userSchema.methods.isPasswordValid = (password) => {
+userSchema.methods.isPasswordValid = function(password) {
   return bcrypt.compareSync(password, this.password);
 };
 
