@@ -34,7 +34,7 @@ app.use(passport.session());
 app.use('/', require('./app/routes/home.js'));
 app.use('/repertoire', require('./app/routes/repertoire.js'));
 
-let secureServer = http.createServer(app).listen(process.env.PORT || 8000, () => {
+let secureServer = http.createServer(app).listen(process.env.PORT || 8080, () => {
 	let addr = secureServer.address();
 	console.log(`Server listening at http://0.0.0.0:${addr.port}`);
 });

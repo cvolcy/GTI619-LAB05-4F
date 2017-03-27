@@ -435,40 +435,4 @@ router.get("/affaire", (req, res, next) => {
   ]});
 });
 
-router.get('/', (req, res) => {
-  let User = mongoose.model("User");
-  let Role = mongoose.model("Role");
-  // return;
-  // User.findOne({username: "admin"}).populate('role').then((user) => {
-  //   // administrateur
-  //   user.username = "administrateur";
-  //   user.password = user.hashPassword('admin');
-  //   user.save((err) => {
-  //     if (err) {
-  //       res.render('index', { result: JSON.stringify(err), isPasswordUser: "erreur" });    
-  //     }
-  //     res.render('index', { result: JSON.stringify(user, null, 2), isPasswordUser: "" });
-  //   });
-  // }).catch((err) => {
-  //   res.render('index', { result: JSON.stringify(err), isPasswordUser: "erreur" });
-  // });
-  // let user1 = new Role();
-  // user1.name = "prep_residentiel";
-  // let user2 = new Role();
-  // user2.name = "prep_affaire";
-  // user1.save().then((role1) => {
-  //   user2.save().then((role2) => {
-  //     res.json([role1, role2]);
-  //   })
-  // })
-  // User.findOne({username: 'utilisateur2'}).then((user) => {
-  //   Role.findOne({name: 'prep_affaire'}).then((role) => {
-  //     user.role = role;
-  //     user.save().then((usersave) => {
-  //       res.json(usersave);
-  //     })
-  //   })
-  // })
-})
-
 module.exports = router;
