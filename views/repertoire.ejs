@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <%- include("partials/head", {title: title}) %>
+</head>
+<body>
+  <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+
+    <div class="card">
+      <div class="card-height-indicator"></div>
+      <div class="card-content" style="max-height:100%;overflow-y:auto;">
+        <div class="card-body">
+        <h2><%= title %></h2>
+          <table class="table table-striped table-hover ">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Courriel</th>
+                <th>Tel.</th>
+                <th>Adresse</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% clients.forEach((client) => { %>
+                <tr>
+                  <td><%= client.id %></td>
+                  <td><%= client.name %></td>
+                  <td><%= client.email %></td>
+                  <td><%= client.phone %></td>
+                  <td><%= client.location %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>      
+        </div>
+      </div>
+    </div>
+      </div>
+    </div>
+    
+  </div>
+  <%- include("partials/footer") %>
+</body>
+</html>
+<!-- // Example of a random customer generator
+var faker = require('faker'); // Faker.js
+
+api = [];
+
+for (let i=0; i < 30; i++) {
+    let name = faker.name.findName();
+    api.push({
+        id:    random.special(4, 8),
+        name:  name,
+        email: faker.internet.email(name.replace(' ', '.').replace('..', '.')),
+        phone: faker.phone.phoneNumber("("+list(['438', '514', '450'])+") ###-####"),
+        location: faker.address.streetAddress() + ', ' +
+                    faker.address.city() + ', ' +
+                    faker.address.state()
+    });
+} -->
