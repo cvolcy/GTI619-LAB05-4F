@@ -32,9 +32,20 @@ passport.use(new LocalStrategy(function(username, password, done) {
   }
 ));
 
+router.get("/signin", (req, res, next) => {
+  res.render('signin');
+});
+
 router.post('/signin', passport.authenticate('local', {
 	successRedirect : '/repertoire/residentiel', //pour tester
   failureRedirect : '/auth/signin'
 }));
+
+router.get("/signup", (req, res, next) => {
+  res.render('signup');
+});
+
+router.post("/signup", (req, res, next) => {
+});
 
 module.exports = router;
