@@ -5,13 +5,9 @@ const express = require('express'),
 
 let router = express.Router();
 
-router.get("/signin", (req, res, next) => {
-  res.render('signin');
-});
-
 // used to serialize the user
 passport.serializeUser(function(user, done) {
-    done(null, user.id);
+    done(null, user);
 });
 
 // used to deserialize the user
@@ -23,8 +19,8 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new LocalStrategy(function(username, password, done) {
-    let users = mongoose.model("User");
-    users.find().byName(username).then(function(user) {
+    let User = mongoose.model("User");
+    User.findOne().byName(username).then(function(user) {
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
       }
@@ -33,9 +29,6 @@ passport.use(new LocalStrategy(function(username, password, done) {
       }
       return done(null, user);
     });
-    // var User = mongoose.model('User');
-    // var user = new User({ username : username, password : password})
-    // return done(null, user);
   }
 ));
 
