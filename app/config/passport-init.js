@@ -1,7 +1,17 @@
 const LocalStrategy = require('passport-local').Strategy,
       mongoose = require('mongoose');
 
-module.exports = function(passport) {
+module.exports = function(passport, app) {
+  app.use(function(req, res, next) {
+    // Pour avoir accès à ces variables dans les vues.
+
+    app.locals.isAuthenticated = req.isAuthenticated();
+    app.locals.user = req.user;
+    app.locals.role = req.isAuthenticated() ? req.user.role.name : null;
+
+    next();
+  });
+
   // used to serialize the user
   passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -10,8 +20,10 @@ module.exports = function(passport) {
   // used to deserialize the user
   passport.deserializeUser(function(id, done) {
     let User = mongoose.model("User");
-    User.findById(id, function(err, user) {
-        done(err, user);
+    User.findById(id).populate('role').then((user) => {
+        done(null, user);
+    }).catch((err) => {
+      done(err);
     });
   });
 

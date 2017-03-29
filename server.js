@@ -35,7 +35,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-require('./app/config/passport-init')(passport);
+require('./app/config/passport-init')(passport, app);
 
 // Routers
 app.use('/', require('./app/routes/home.js'));
