@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <%- include("partials/head", {title: "Accueil"}) %>
+  </head>
+  <body>
+    <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
+      <div class="container">
+        <form action="/auth/signin" method="post">
+          <div class="form-group">
+            <label for="input-username" class="col-sm-3 control-label">Username</label>
+            <div class="col-sm-9">
+              <input type="input" class="form-control" id="input-username" name="username" placeholder="Username" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="input-password" class="col-sm-3 control-label">Password</label>
+            <div class="col-sm-9">
+              <input type="password" class="form-control" id="input-password" name="password" placeholder="Password" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+              <button type="submit" class="btn btn-default">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                Sign in
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    <%- include("partials/footer") %>
+  </body>
+</html>
