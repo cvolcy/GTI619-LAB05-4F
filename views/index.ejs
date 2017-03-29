@@ -6,6 +6,10 @@
   <body>
     <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
       <div class="container">
+        <h3>Is Authenticated : <%= isAuthenticated ? 'True' : 'False' %></h3>
+        <h3>Current User</h3>
+        <pre><%= user %></pre>
+        <h3>List of users</h3>
         <pre><%= result %></pre>
       </div>
     <%- include("partials/footer") %>
