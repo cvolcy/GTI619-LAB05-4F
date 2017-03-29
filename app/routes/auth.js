@@ -1,51 +1,32 @@
-const express = require('express'),
-      passport = require('passport'),
-      LocalStrategy = require('passport-local').Strategy,
-      mongoose = require('mongoose');
+const express = require('express');
+
+module.exports = function(passport) {
 
 let router = express.Router();
 
-// used to serialize the user
-passport.serializeUser(function(user, done) {
-    done(null, user);
-});
-
-// used to deserialize the user
-passport.deserializeUser(function(id, done) {
-  let User = mongoose.model("User");
-  User.findById(id, function(err, user) {
-      done(err, user);
+  router.get("/signin", (req, res, next) => {
+    res.render('signin');
   });
-});
 
-passport.use(new LocalStrategy(function(username, password, done) {
-    let User = mongoose.model("User");
-    User.findOne().byName(username).then(function(user) {
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.isPasswordValid(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-));
+  router.post('/signin', passport.authenticate('local', {
+  	successRedirect : '/repertoire/residentiel', //pour tester
+    failureRedirect : '/auth/signin'
+  }));
 
-router.get("/signin", (req, res, next) => {
-  res.render('signin');
-});
+  router.get("/signup", (req, res, next) => {
+    res.render('signup');
+  });
 
-router.post('/signin', passport.authenticate('local', {
-	successRedirect : '/repertoire/residentiel', //pour tester
-  failureRedirect : '/auth/signin'
-}));
+  router.post("/signup", (req, res, next) => {
+    res.send('/signup [POST]');
+  });
 
-router.get("/signup", (req, res, next) => {
-  res.render('signup');
-});
+  router.get("/signout", (req, res, next) => {
+    req.logout();
+    req.session.destroy();
+    res.redirect('/');
+  });
 
-router.post("/signup", (req, res, next) => {
-});
+  return router;
 
-module.exports = router;
+}
