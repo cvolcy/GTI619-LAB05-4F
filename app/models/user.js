@@ -3,7 +3,15 @@ const mongoose = require('mongoose'),
 
 let userSchema = new mongoose.Schema({
   username: { type : String, unique : true, required : true },
-  password: { type : String, required : true }, //hash created from password
+  password: { 
+    type : String, 
+    required : true,
+    set: function(newPass) {
+      this._oldPassword = this.password;
+      return newPass;
+    }
+  }, //hash created from password
+  passwordHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PasswordHistory' }],
   role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role' },
   created_at: {type: Date, default: Date.now},
   updated_at: {type: Date, default: Date.now},
@@ -20,7 +28,17 @@ userSchema.methods.isPasswordValid = function(password) {
 
 userSchema.pre('save', function(next) {
   this.updated_at = new Date();
-  next();
+  
+  if (this.isModified("password")) {
+    let PasswordHistory = mongoose.model("PasswordHistory");
+    let newPassword = new PasswordHistory({ password: this._oldPassword })
+    newPassword.save().then(() => {
+      this.passwordHistory.push(newPassword);
+      next();
+    });
+  } else {
+    next();
+  }
 });
 
 userSchema.query.byUsername = function(username) {
