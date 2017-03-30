@@ -38,9 +38,10 @@ app.use(passport.session());
 require('./app/config/passport-init')(passport, app);
 
 // Routers
-app.use('/', require('./app/routes/home.js'));
-app.use('/repertoire', require('./app/routes/repertoire.js'));
-app.use('/auth', require('./app/routes/auth.js')(passport));
+app.use('/', require('./app/routes/home.js')(app));
+app.use('/repertoire', require('./app/routes/repertoire.js')(app));
+app.use('/auth', require('./app/routes/auth.js')(passport, app));
+app.use('/security', require('./app/routes/security.js')(app));
 
 let secureServer = http.createServer(app).listen(process.env.PORT || 8080, () => {
 	let addr = secureServer.address();
