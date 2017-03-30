@@ -1,4 +1,4 @@
-const http 	 = require('http'), // Http for the moment use let's encrypt certificate later
+const https 	 = require('https'),
 	  express  	 = require('express'),
 	  app      	 = express(),
 	  mongoose 	 = require('mongoose'),
@@ -7,7 +7,8 @@ const http 	 = require('http'), // Http for the moment use let's encrypt certifi
 	  cookieParser = require('cookie-parser'),
 	  bodyParser = require('body-parser'),
 	  session    = require('express-session'),
-	  path			 = require('path')
+	  path			 = require('path'),
+          fs         = require('fs'),
 	  MongoStore = require('connect-mongo')(session); 
 
 // MongoDB setup
@@ -43,7 +44,10 @@ app.use('/repertoire', require('./app/routes/repertoire.js')(app));
 app.use('/auth', require('./app/routes/auth.js')(passport, app));
 app.use('/security', require('./app/routes/security.js')(app));
 
-let secureServer = http.createServer(app).listen(process.env.PORT || 8080, () => {
+let secureServer = https.createServer({
+		key: fs.readFileSync('./app/config/privatekey.key', 'utf8'),
+		cert: fs.readFileSync('./app/config/certificate.crt', 'utf8')
+	},app).listen(process.env.PORT || 8080, () => {
 	let addr = secureServer.address();
 	console.log(`Server listening at http://0.0.0.0:${addr.port}`);
 });
