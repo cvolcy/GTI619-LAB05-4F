@@ -41,6 +41,7 @@ require('./app/config/passport-init')(passport, app);
 app.use('/', require('./app/routes/home.js'));
 app.use('/repertoire', require('./app/routes/repertoire.js'));
 app.use('/auth', require('./app/routes/auth.js')(passport));
+app.use('/security', require('./app/routes/security.js'));
 
 let secureServer = http.createServer(app).listen(process.env.PORT || 8080, () => {
 	let addr = secureServer.address();
