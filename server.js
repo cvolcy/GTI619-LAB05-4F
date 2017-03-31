@@ -10,7 +10,7 @@ const http     = require('http'),
     session    = require('express-session'),
     path       = require('path'),
     fs         = require('fs'),
-    MongoStore = require('connect-mongo')(session); 
+    MongoStore = require('connect-mongo')(session);
 
 // MongoDB setup
 mongoose.connect("mongodb://heroku_gfvkrw47:8o4868opmpueu9i8b2r9joj5qk@ds021182.mlab.com:21182/heroku_gfvkrw47");
