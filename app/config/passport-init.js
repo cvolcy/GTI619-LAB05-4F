@@ -8,9 +8,29 @@ module.exports = function(passport, app) {
     app.locals.isAuthenticated = req.isAuthenticated();
     app.locals.user = req.user;
     app.locals.role = req.isAuthenticated() ? req.user.role.name : null;
+    // Accessible avec "req.app.checkRole('foo')"
+    app.locals.checkRole = (...rolesToCheck) => {
+      if (req.isAuthenticated()) {
+        console.log(rolesToCheck, req.user.role.name);
+        return rolesToCheck.includes(req.user.role.name);
+      }
+      return false;
+    }
 
     next();
   });
+
+  // Use as middleware
+  // ex. : app.get('/', app.locals.authorizeFor('role'), funct...
+  app.locals.authorizeFor = (...rolesToCheck) => {
+    // function generator
+    return (req, res, next) => {
+      if (req.app.locals.checkRole(...rolesToCheck)) {
+        return next();
+      }
+      res.redirect('/');
+    }
+  }
 
   // used to serialize the user
   passport.serializeUser(function(user, done) {
@@ -36,7 +56,7 @@ module.exports = function(passport, app) {
       if (!user.isPasswordValid(password)) {
         return done(null, false, { message: 'Incorrect password.' });
       }
-      console.log(JSON.stringify(user));
+
       return done(null, user);
     });
   }));
