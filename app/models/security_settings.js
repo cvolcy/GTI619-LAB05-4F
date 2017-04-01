@@ -18,6 +18,9 @@ let securitySchema = new mongoose.Schema({
     upperlowercase: { type: Boolean, default: false },
     number: { type: Boolean, default: false },
     specialChar: { type: Boolean, default: false }
+  },
+  session: {
+    maxAge: { type: Number, default: 20 }
   }
 });
 
