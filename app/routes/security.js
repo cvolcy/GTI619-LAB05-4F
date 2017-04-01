@@ -4,18 +4,39 @@ const express = require('express'),
 module.exports = (app) => {
   let router = express.Router();
 
-  router.get("/", (req, res, next) => {
+  router.get("/", app.locals.authorizeFor("administrateur"), (req, res, next) => {
     let SecuritySettings = mongoose.model("SecuritySettings");
 
     SecuritySettings.findOne({}).then((result) => {
-        res.render('security', { passwordRules: result.passwordRules, passwordChange: result.passwordChange, bruteforce: result.bruteforce });
-      }).catch((err) => {
-        res.render('test', { result: JSON.stringify(err) });
-      });
+      res.render('security', { passwordRules: result.passwordRules, passwordChange: result.passwordChange, bruteforce: result.bruteforce });
+    }).catch((err) => {
+      res.render('index', { result: JSON.stringify(err) });
+    });
   });
 
-  router.post("/setting", (req, res, next) => {
-    res.send('/setting [POST]');
+  router.post("/setting", app.locals.authorizeFor("administrateur"), (req, res, next) => {
+    let SecuritySettings = mongoose.model("SecuritySettings");
+    SecuritySettings.findOne({}).then((setting) => {
+      setting.bruteforce.maxAttempt = req.body.maxAttempt;
+      setting.bruteforce.delay = req.body.delay;
+      setting.bruteforce.blockAccess = req.body.blockAccess;
+      setting.passwordChange.onBruteForceMaxAttempt = req.body.onBruteForceMaxAttempt;
+      setting.passwordChange.forgetPassword = req.body.forgetPassword;
+      setting.passwordChange.strongAuthentication = req.body.strongAuthentication;
+      setting.passwordChange.renewalDelay = req.body.renewalDelay;
+      setting.passwordRules.minlength = req.body.minlength;
+      setting.passwordRules.maxlength = req.body.maxlength;
+      setting.passwordRules.upperlowercase = req.body.upperlowercase;
+      setting.passwordRules.number = req.body.number;
+      setting.passwordRules.specialChar = req.body.specialChar;
+      setting.save().then((setting) => {
+        res.redirect('/security');
+      }).catch((err) => {
+        res.redirect('security', { result: JSON.stringify(err) });
+      });
+    }).catch((err) => {
+      res.render('index', { result: JSON.stringify(err) });
+    });
   });
 
   return router;
