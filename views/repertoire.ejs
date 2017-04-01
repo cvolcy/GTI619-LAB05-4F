@@ -28,20 +28,20 @@
               <% clients.forEach((client) => { %>
                 <tr>
                   <td><%= client.id %></td>
-                  <td><%= client.name %></td>
-                  <td><%= client.email %></td>
-                  <td><%= client.phone %></td>
-                  <td><%= client.location %></td>
+                  <td><%= client.info.name %></td>
+                  <td><%= client.info.email %></td>
+                  <td><%= client.info.phone %></td>
+                  <td><%= client.info.street %> <%= client.info.city %> </td>
                 </tr>
               <% }) %>
             </tbody>
-          </table>      
+          </table>
         </div>
       </div>
     </div>
       </div>
     </div>
-    
+
   </div>
   <%- include("partials/footer") %>
 </body>
