@@ -796,54 +796,43 @@ var client_daffaire_list = [
   }
 ];
 
-var role1 = new Role();
-var client_residentiel_role = Role.findById("58dee1697a555253f4ad6d02").then((role) => {
-  var info1 = new Info({
-    name: client_residentiel_list[0].name,
-    email: client_residentiel_list[0].email,
-    phone: client_residentiel_list[0].phone,
-    street: client_residentiel_list[0].location.street,
-    city: client_residentiel_list[0].location.city,
-    state: client_residentiel_list[0].location.state,
-    postal_code: client_residentiel_list[0].location.postalcode,
-  })
-  var userResidentiel1 = new User({
-    username: client_residentiel_list[0].username
-  });
-  userResidentiel1.role = role;
-  userResidentiel1.info = info1;
-  userResidentiel1.save().then(function (doc) {
-    console.log('meow');
-  }).catch(function(err) {
-    console.log('err', err);
-  });
-  info1.save().then(function (doc) {
-    console.log('meow info');
-  }).catch(function(err) {
-    console.log('err', err);
+Role.findById("58dee1697a555253f4ad6d02").then((role) => {
+  client_residentiel_list.forEach(function(element) {
+    var info = new Info({
+      name: element.name,
+      email: element.email,
+      phone: element.phone,
+      street: element.location.street,
+      city: element.location.city,
+      state: element.location.state,
+      postal_code: element.location.postalcode,
+    });
+    var user = new User({
+      username: element.username
+    });
+    user.role = role;
+    user.info = info;
+    // user.save().then((user) => {console.log('user', user.username);}).catch(function(err) {console.log('err');});
+    // info.save().then((info) => {console.log('info', info.name);}).catch(function(err) {console.log('err');});
   });
 });
 var client_daffaire_role = Role.findById("58dee1697a555253f4ad6d03").then((role) => {
-  //console.log(role.name);
+  client_daffaire_list.forEach(function(element) {
+    var info = new Info({
+      name: element.name,
+      email: element.email,
+      phone: element.phone,
+      street: element.location.street,
+      city: element.location.city,
+      state: element.location.state,
+      postal_code: element.location.postalcode,
+    });
+    var user = new User({
+      username: element.username
+    });
+    user.role = role;
+    user.info = info;
+    // user.save().then((user) => {console.log('user', user.username);}).catch(function(err) {console.log('err');});
+    // info.save().then((info) => {console.log('info', info.name);}).catch(function(err) {console.log('err');});
+  });
 });
-
-// userResidentiel.save(function (err) {
-//   if (err) {
-//     console.log(err);
-//   } else {
-//     console.log('meow');
-//   }
-// });
-
-// console.log(userResidentiel.username);
-// console.log(userResidentiel.info.name);
-
-// client_residentiel_list.forEach(function(element1) {
-//   client_daffaire_list.forEach(function(element2) {
-//     if (element1.username == element2.username) {
-//       console.log(element1.username);
-//     }
-//   });
-// });
-
-//mongoose.connection.close();
