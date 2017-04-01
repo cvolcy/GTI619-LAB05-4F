@@ -30,6 +30,10 @@
         <% } %>
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
+
+        <% if (isAuthenticated) { %>
+          <li><a href="/profile">Profile</a></li>
+        <% } %>
         <% if (checkRole("administrateur")) { %>
           <li><a href="/security">Setting</a></li>
         <% } %>

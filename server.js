@@ -44,6 +44,7 @@ app.use('/', require('./app/routes/home.js')(app));
 app.use('/repertoire', require('./app/routes/repertoire.js')(app));
 app.use('/auth', require('./app/routes/auth.js')(passport, app));
 app.use('/security', require('./app/routes/security.js')(app));
+app.use('/profile', require('./app/routes/profile.js')(app));
 
 let secureServer = https.createServer({
     key: fs.readFileSync('./app/config/privatekey.key', 'utf8'),
