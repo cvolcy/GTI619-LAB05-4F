@@ -31,8 +31,15 @@ app.use(express.static(path.resolve(__dirname, 'static')));
 
 app.use(session({ 
   secret: process.env.SECRET || 'secret', 
-  resave: true, 
-  saveUninitialized: true,
+  resave: true,
+  saveUninitialized: false,
+  rolling: true,    // Reset the maxAge on every request
+  cookie: {
+    path: '/',
+    httpOnly: true,
+    secure: true,
+    maxAge: 1000 * 10
+  },
   store: new MongoStore({ mongooseConnection: mongoose.connection }) 
 }));
 app.use(passport.initialize());

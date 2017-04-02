@@ -8,7 +8,12 @@ module.exports = (app) => {
     let SecuritySettings = mongoose.model("SecuritySettings");
 
     SecuritySettings.findOne({}).then((result) => {
-      res.render('security', { passwordRules: result.passwordRules, passwordChange: result.passwordChange, bruteforce: result.bruteforce });
+      res.render('security', { 
+        passwordRules: result.passwordRules,
+        passwordChange: result.passwordChange,
+        bruteforce: result.bruteforce,
+        session: result.session
+      });
     }).catch((err) => {
       res.render('index', { result: JSON.stringify(err) });
     });
@@ -29,6 +34,7 @@ module.exports = (app) => {
       setting.passwordRules.upperlowercase = req.body.upperlowercase;
       setting.passwordRules.number = req.body.number;
       setting.passwordRules.specialChar = req.body.specialChar;
+      setting.session.maxAge = req.body.maxAge;
       setting.save().then((setting) => {
         res.redirect('/security');
       }).catch((err) => {
