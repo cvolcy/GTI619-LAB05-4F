@@ -5,111 +5,129 @@
   </head>
   <body>
     <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
-      <form action="/security/setting" class="container" method="post">
-        <div class="form-group">
-          <h3>Brute Force</h3>
-          <label class="col-sm-3">Max Attempt</label>
-          <div class="col-sm-9">
-            <input type="input" value="<%= bruteforce.maxAttempt %>" name="maxAttempt" placeholder="number">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-height-indicator"></div>
+            <div class="card-content" style="max-height:100%;overflow-y:auto;">
+              <div class="card-body">
+                <form action="/security/setting" class="container" method="post">
+                  <h3>Brute Force</h3>
+                  <div class="form-group">
+                    <label class="col-sm-3">Max Attempt</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" value="<%= bruteforce.maxAttempt %>" name="maxAttempt" placeholder="number">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3">Delay</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" value="<%= bruteforce.delay %>" name="delay" placeholder="number">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3">Block Access</label>
+                    <div class="col-sm-9">
+                      <div class="form-group" id="blockAccess">
+                        <div class="radio"><label><input type="radio" value="true" <%= bruteforce.blockAccess ? 'checked' : '' %> name="blockAccess"/>oui</label></div>
+                        <div class="radio"><label><input type="radio" value="false" <%= bruteforce.blockAccess ? '' : 'checked' %> name="blockAccess"/>non</label></div>
+                      </div>
+                    </div>
+                  </div>
+                  <h3>Password Change</h3>
+                  <div class="form-group">
+                    <label class="col-sm-3">On Brute Force Max Attempt</label>
+                    <div class="col-sm-9">
+                      <div class="form-group" id="onBruteForceMaxAttempt">
+                        <div class="radio"><label><input type="radio" value="true" <%= passwordChange.onBruteForceMaxAttempt ? 'checked' : '' %> name="onBruteForceMaxAttempt"/>oui</label></div>
+                        <div class="radio"><label><input type="radio" value="false" <%= passwordChange.onBruteForceMaxAttempt ? '' : 'checked' %> name="onBruteForceMaxAttempt"/>non</label></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3">Forget Password</label>
+                    <div class="col-sm-9">
+                      <div class="form-group" id="forgetPassword">
+                        <div class="radio"><label><input type="radio" value="true" <%= passwordChange.forgetPassword ? 'checked' : '' %> name="forgetPassword"/>oui</label></div>
+                        <div class="radio"><label><input type="radio" value="false" <%= passwordChange.forgetPassword ? '' : 'checked' %> name="forgetPassword"/>non</label></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3">Strong Authentication</label>
+                    <div class="col-sm-9">
+                      <div class="form-group" id="strongAuthentication">
+                        <div class="radio"><label><input type="radio" value="true" <%= passwordChange.strongAuthentication ? 'checked' : '' %> name="strongAuthentication"/>oui</label></div>
+                        <div class="radio"><label><input type="radio" value="false" <%= passwordChange.strongAuthentication ? '' : 'checked' %> name="strongAuthentication"/>non</label></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3">Renewal Delay</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" value="<%= passwordChange.renewalDelay %>" name="renewalDelay" placeholder="number">
+                    </div>
+                  </div>
+                  <h3>Password Rules</h3>
+                  <div class="form-group">
+                    <label class="col-sm-3">Mix Length</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" value="<%= passwordRules.minlength %>" name="minlength" placeholder="number">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3">Max Length</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" value="<%= passwordRules.maxlength %>" name="maxlength" placeholder="number">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3">Upper Lower Case</label>
+                    <div class="col-sm-9">
+                      <div class="form-group" id="upperlowercase">
+                        <div class="radio"><label><input type="radio" value="true" <%= passwordRules.upperlowercase ? 'checked' : '' %> name="upperlowercase"/>oui</label></div>
+                        <div class="radio"><label><input type="radio" value="false" <%= passwordRules.upperlowercase ? '' : 'checked' %> name="upperlowercase"/>non</label></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3">Number</label>
+                    <div class="col-sm-9">
+                      <div class="form-group" id="number">
+                        <div class="radio"><label><input type="radio" value="true" <%= passwordRules.number ? 'checked' : '' %> name="number"/>oui</label></div>
+                        <div class="radio"><label><input type="radio" value="false" <%= passwordRules.number ? '' : 'checked' %> name="number"/>non</label></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3">Special Char</label>
+                    <div class="col-sm-9">
+                      <div class="form-group" id="specialChar">
+                        <div class="radio"><label><input type="radio" value="true" <%= passwordRules.specialChar ? 'checked' : '' %> name="specialChar"/>oui</label></div>
+                        <div class="radio"><label><input type="radio" value="false" <%= passwordRules.specialChar ? '' : 'checked' %> name="specialChar"/>non</label></div>
+                      </div>
+                    </div>
+                  </div>
+                  <h3>Session</h3>
+                  <div class="form-group">
+                    <label for="maxAge" class="col-sm-3">Max Age (in minutes)</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" value="<%= session.maxAge %>" name="maxAge" id="maxAge" placeholder="number">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-9">
+                      <input class="btn btn-primary btn-raised pull-right" type="submit" value="Submit">
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label class="col-sm-3">Delay</label>
-          <div class="col-sm-9">
-            <input type="input" value="<%= bruteforce.delay %>" name="delay" placeholder="number">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3">Block Access</label>
-          <div class="col-sm-9">
-            <fieldset id="blockAccess">
-              <input type="radio" value="true" checked="<%= bruteforce.blockAccess ? 'checked' : '' %>" name="blockAccess">oui</input>
-              <input type="radio" value="false" checked="<%= bruteforce.blockAccess ? '' : 'checked' %>" name="blockAccess">non</input>
-            </fieldset>
-          </div>
-        </div>
-        <div class="form-group">
-          <h3>Password Change</h3>
-          <label class="col-sm-3">On Brute Force Max Attempt</label>
-          <div class="col-sm-9">
-            <fieldset id="onBruteForceMaxAttempt">
-              <input type="radio" value="true" checked="<%= passwordChange.onBruteForceMaxAttempt ? 'checked' : '' %>" name="onBruteForceMaxAttempt">oui</input>
-              <input type="radio" value="false" checked="<%= passwordChange.onBruteForceMaxAttempt ? '' : 'checked' %>" name="onBruteForceMaxAttempt">non</input>
-            </fieldset>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3">Forget Password</label>
-          <div class="col-sm-9">
-            <fieldset id="forgetPassword">
-              <input type="radio" value="true" checked="<%= passwordChange.forgetPassword ? 'checked' : '' %>" name="forgetPassword">oui</input>
-              <input type="radio" value="false" checked="<%= passwordChange.forgetPassword ? '' : 'checked' %>" name="forgetPassword">non</input>
-            </fieldset>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3">Strong Authentication</label>
-          <div class="col-sm-9">
-            <fieldset id="strongAuthentication">
-              <input type="radio" value="true" checked="<%= passwordChange.strongAuthentication ? 'checked' : '' %>" name="strongAuthentication">oui</input>
-              <input type="radio" value="false" checked="<%= passwordChange.strongAuthentication ? '' : 'checked' %>" name="strongAuthentication">non</input>
-            </fieldset>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3">Renewal Delay</label>
-          <div class="col-sm-9">
-            <input type="input" value="<%= passwordChange.renewalDelay %>" name="renewalDelay" placeholder="number">
-          </div>
-        </div>
-        <div class="form-group">
-          <h3>Password Rules</h3>
-          <label class="col-sm-3">Mix Length</label>
-          <div class="col-sm-9">
-            <input type="input" value="<%= passwordRules.minlength %>" name="minlength" placeholder="number">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3">Max Length</label>
-          <div class="col-sm-9">
-            <input type="input" value="<%= passwordRules.maxlength %>" name="maxlength" placeholder="number">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3">Upper Lower Case</label>
-          <div class="col-sm-9">
-            <fieldset id="upperlowercase">
-              <input type="radio" value="true" checked="<%= passwordRules.upperlowercase ? 'checked' : '' %>" name="upperlowercase">oui</input>
-              <input type="radio" value="false" checked="<%= passwordRules.upperlowercase ? '' : 'checked' %>" name="upperlowercase">non</input>
-            </fieldset>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3">Number</label>
-          <div class="col-sm-9">
-            <fieldset id="number">
-              <input type="radio" value="true" checked="<%= passwordRules.number ? 'checked' : '' %>" name="number">oui</input>
-              <input type="radio" value="false" checked="<%= passwordRules.number ? '' : 'checked' %>" name="number">non</input>
-            </fieldset>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-3">Special Char</label>
-          <div class="col-sm-9">
-            <fieldset id="specialChar">
-              <input type="radio" value="true" checked="<%= passwordRules.specialChar ? 'checked' : '' %>" name="specialChar">oui</input>
-              <input type="radio" value="false" checked="<%= passwordRules.specialChar ? '' : 'checked' %>" name="specialChar">non</input>
-            </fieldset>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-3">
-            <button type="submit" class="btn btn-default">
-              Save Changes
-            </button>
-          </div>
-        </div>
-      </form>
+      </div>
+    </div>
     <%- include("partials/footer") %>
   </body>
 </html>

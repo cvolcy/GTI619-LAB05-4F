@@ -47,19 +47,19 @@
 </body>
 </html>
 <!-- // Example of a random customer generator
-var faker = require('faker'); // Faker.js
-
-api = [];
-
-for (let i=0; i < 30; i++) {
-    let name = faker.name.findName();
-    api.push({
-        id:    random.special(4, 8),
-        name:  name,
-        email: faker.internet.email(name.replace(' ', '.').replace('..', '.')),
-        phone: faker.phone.phoneNumber("("+list(['438', '514', '450'])+") ###-####"),
-        location: faker.address.streetAddress() + ', ' +
-                    faker.address.city() + ', ' +
-                    faker.address.state()
-    });
-} -->
+  var faker = require('faker'); // Faker.js
+  
+  api = [];
+  
+  for (let i=0; i < 30; i++) {
+      let name = faker.name.findName();
+      api.push({
+          id:    random.special(4, 8),
+          name:  name,
+          email: faker.internet.email(name.replace(' ', '.').replace('..', '.')),
+          phone: faker.phone.phoneNumber("("+list(['438', '514', '450'])+") ###-####"),
+          location: faker.address.streetAddress() + ', ' +
+                      faker.address.city() + ', ' +
+                      faker.address.state()
+      });
+    } -->

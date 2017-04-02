@@ -3,6 +3,11 @@ const LocalStrategy = require('passport-local').Strategy,
 
 module.exports = function(passport, app) {
   app.use(function(req, res, next) {
+    let SecuritySettings = mongoose.model("SecuritySettings");
+    SecuritySettings.findOne({}).then((settings) => {
+      req.session.cookie.maxAge = 1000 * 60 * settings.session.maxAge; // value dans le security settings
+    });
+
     // Pour avoir accès à ces variables dans les vues.
 
     app.locals.isAuthenticated = req.isAuthenticated();
@@ -11,7 +16,6 @@ module.exports = function(passport, app) {
     // Accessible avec "req.app.checkRole('foo')"
     app.locals.checkRole = (...rolesToCheck) => {
       if (req.isAuthenticated()) {
-        console.log(rolesToCheck, req.user.role.name);
         return rolesToCheck.includes(req.user.role.name);
       }
       return false;
