@@ -1,6 +1,6 @@
 const express = require('express');
 
-module.exports = function(passport) {
+module.exports = function(passport, app) {
 
 let router = express.Router();
 
@@ -9,7 +9,7 @@ let router = express.Router();
   });
 
   router.post('/signin', passport.authenticate('local', {
-  	successRedirect : '/repertoire/residentiel', //pour tester
+  	successRedirect : '/auth/grid', //pour tester
     failureRedirect : '/auth/signin'
   }));
 
@@ -25,6 +25,49 @@ let router = express.Router();
     req.logout();
     req.session.destroy();
     res.redirect('/');
+  });
+
+  router.get('/grid', (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      res.redirect('/auth/signin');
+    }
+    let questions = [];
+    let challenge = []
+    let keys = Object.keys(req.user.card.getDecryptedCard());
+    for (var i = 0; i < 3; i++) {
+      let key = keys[Math.floor(Math.random() * keys.length)];
+      let index = Math.floor(Math.random()*5);
+      challenge.push([key, index]);
+      questions.push(""+ key + (index + 1));
+    }
+
+    req.session.challenge = challenge;
+
+    res.render('grid', { 
+      title: 'Grid Card | 2 Factor Auth', 
+      gridCard: req.user.card.getDecryptedCard(), 
+      questions: questions,
+      showGrid: req.query.showGrid
+    });
+  });
+
+  router.post('/grid', (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      res.redirect('/auth/signin');
+    }
+
+    let gridCard = req.user.card.getDecryptedCard();
+    let anwsers = req.body.anwsers.map((a) => a.toLowerCase());
+    for (var i = 0; i < req.session.challenge.length; i++) {
+      let key = req.session.challenge[i][0];
+      let index = req.session.challenge[i][1];
+
+      if (anwsers.indexOf(gridCard[key][index]) === -1) {
+        return res.redirect('/auth/grid');
+      }
+    }
+    req.session.twoFactorAuth = true;
+    return res.redirect('/');
   });
 
   return router;

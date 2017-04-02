@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <%- include("partials/head", {title: title}) %>
+  </head>
+  <body>
+    <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-height-indicator"></div>
+            <div class="card-content" style="max-height:100%;overflow-y:auto;">
+              <div class="card-body">
+                <h2><%= title %></h2>
+                <form method="POST">
+                  <h3>Challenge</h3>
+                  <% questions.forEach((question) => { %>
+                    <div class="form-group label-floating">
+                      <label class="control-label"><%= question.toUpperCase() %></label>
+                      <input type="text" class="form-control" name="anwsers[]">
+                    </div>
+                  <% }) %>
+                  <div class="form-group">
+                    <input class="btn btn-primary btn-raised pull-right" type="submit" value="Soumettre">
+                  </div>
+                </form>
+                <% if (showGrid) { %>
+                  <table class="table table-striped table-hover table-bordered table-condensed" style="width: auto; text-transform: uppercase;">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>5</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for (key in gridCard) { %>
+                      <tr>
+                        <th><%= key %></th>
+                        <% gridCard[key].forEach((val, i) => { %>
+                          <td<%- (questions.includes(key+(i+1))) ? ' class="success"' : '' %>><%= val %></td>
+                        <% }) %>
+                      </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include("partials/footer") %>
+  </body>
+</html>
