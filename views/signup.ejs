@@ -8,21 +8,59 @@
       <div class="container">
         <form action="/auth/signup" method="post">
           <div class="form-group">
-            <label for="input-username" class="col-sm-3 control-label">Username</label>
+            <h3>Required</h3>
+            <label class="col-sm-3 control-label">Username</label>
             <div class="col-sm-9">
-              <input type="input" class="form-control" id="input-username" name="username" placeholder="Username" required>
+              <input type="input" class="form-control" name="username" placeholder="Username" required>
             </div>
           </div>
           <div class="form-group">
-            <label for="input-password" class="col-sm-3 control-label">Password</label>
+            <label class="col-sm-3 control-label">Password</label>
             <div class="col-sm-9">
-              <input type="password" class="form-control" id="input-password" name="password" placeholder="Password" required>
+              <input type="password" class="form-control" name="password"
+              pattern="<%= passRules.number ? '(?=.*\\d)' : '' %><%= passRules.upperlowercase ? '(?=.*[^A-Z])(?=.*[^a-z])' : '' %>.{<%= passRules.minlength %>,<%= passRules.maxlength %>}"
+              onchange="form.passwordConf.pattern = this.value;"
+              placeholder="Password" required>
             </div>
           </div>
           <div class="form-group">
             <label for="input-password" class="col-sm-3 control-label">Repeat Password</label>
             <div class="col-sm-9">
-              <input type="password" class="form-control" id="input-password" name="password" placeholder="Repeat Password" required>
+              <input type="password" class="form-control" id="input-password" name="passwordConf" placeholder="Repeat Password" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="input-password" class="col-sm-3 control-label">Roke</label>
+            <div class="col-sm-9">
+              <input type="password" class="form-control" id="input-password" name="passwordConf" placeholder="Repeat Password" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <h3>Personal Info</h3>
+            <label class="col-sm-3 control-label">Name</label>
+            <div class="col-sm-9">
+              <input type="input" class="form-control" name="name" placeholder="Name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Email</label>
+            <div class="col-sm-9">
+              <input type="input" class="form-control" name="email" placeholder="Email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Phone Number</label>
+            <div class="col-sm-9">
+              <input type="input" class="form-control" name="phone" placeholder="Phone">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Location</label>
+            <div class="col-sm-9">
+              <input type="input" class="form-control" name="street" placeholder="Street">
+              <input type="input" class="form-control" name="city" placeholder="City">
+              <input type="input" class="form-control" name="state" placeholder="State">
+              <input type="input" class="form-control" name="postal_code" placeholder="Postal Code">
             </div>
           </div>
           <div class="form-group">
