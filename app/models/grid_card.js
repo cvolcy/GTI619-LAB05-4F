@@ -7,6 +7,10 @@ let gridCardSchema = new mongoose.Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
+gridCardSchema.methods.getDecryptedCard = function() {
+  return JSON.parse(CryptoJS.AES.decrypt(this.card, process.env.SECRET || 'secret').toString(CryptoJS.enc.Utf8));
+};
+
 gridCardSchema.pre('save', function(next) {
   this.updated_at = new Date();
   if ( this.isNew ) {

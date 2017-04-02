@@ -10,12 +10,12 @@ module.exports = function(passport, app) {
 
     // Pour avoir accès à ces variables dans les vues.
 
-    app.locals.isAuthenticated = req.isAuthenticated();
+    app.locals.isAuthenticated = req.isAuthenticated() && req.session.twoFactorAuth == true;
     app.locals.user = req.user;
     app.locals.role = req.isAuthenticated() ? req.user.role.name : null;
     // Accessible avec "req.app.checkRole('foo')"
     app.locals.checkRole = (...rolesToCheck) => {
-      if (req.isAuthenticated()) {
+      if (app.locals.isAuthenticated) {
         return rolesToCheck.includes(req.user.role.name);
       }
       return false;
@@ -44,7 +44,7 @@ module.exports = function(passport, app) {
   // used to deserialize the user
   passport.deserializeUser(function(id, done) {
     let User = mongoose.model("User");
-    User.findById(id).populate('role').then((user) => {
+    User.findById(id).populate(['role', 'card']).then((user) => {
         done(null, user);
     }).catch((err) => {
       done(err);
@@ -53,7 +53,7 @@ module.exports = function(passport, app) {
 
   passport.use('local', new LocalStrategy(function(username, password, done) {
     let User = mongoose.model("User");
-    User.findOne().byUsername(username).then(function(user) {
+    User.findOne().byUsername(username).populate(['role', 'card']).then(function(user) {
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
       }
