@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <%- include("partials/head", {title: "Profile"}) %>
+  </head>
+  <body>
+    <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
+      <div class="container">
+
+        <div class="col-sm-6">
+            <div class="well">
+
+                        <strong>User id</strong>: <%= user._id %><br>
+                        <strong>Username </strong>: <%= user.username %><br>
+                        <strong>Role</strong>: <%= user.role.name %><br>
+                        <strong>Role date</strong>: <%= user.role.created_at %>
+      </div>
+      </div>
+      </div>
+    <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
+      <div class="well">
+        <form action="/profile/email" method="post">
+          <div class="form-group">
+            <label for="input-email" class="col-sm-3 control-label">Email</label>
+            <div class="col-sm-9">
+              <input type="email" class="form-control" id="input-email" name="email" placeholder="Email" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+              <button type="submit" class="btn btn-default">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                Change Change Email
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
+      <div class="well">
+        <form action="/profile/password" method="post">
+          <div class="form-group">
+            <label for="input-password-old" class="col-sm-3 control-label">Enter present Password</label>
+            <div class="col-sm-9">
+              <input type="password" class="form-control" id="input-password-old" name="password" placeholder="Present Password" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="input-password-new1" class="col-sm-3 control-label">Enter New Password</label>
+            <div class="col-sm-9">
+              <input type="password" class="form-control" id="input-password-new1" name="password_new" placeholder="New Password" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="input-password-new2" class="col-sm-3 control-label">Validate New Password</label>
+            <div class="col-sm-9">
+              <input type="password" class="form-control" id="input-password-new2" name="password_val" placeholder="New Password" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+              <button type="submit" class="btn btn-default">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                Change Password
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    <%- include("partials/footer") %>
+  </body>
+</html>
