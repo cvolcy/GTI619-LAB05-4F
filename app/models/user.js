@@ -3,14 +3,14 @@ const mongoose = require('mongoose'),
 
 let userSchema = new mongoose.Schema({
   username: { type : String, unique : true, required : true },
-  password: { 
-    type : String, 
-    required : true,
+  password: {
+    type : String,
     set: function(newPass) {
       this._oldPassword = this.password;
       return newPass;
     }
   }, //hash created from password
+  info: { type: mongoose.Schema.Types.ObjectId, ref: 'Info' },
   passwordHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PasswordHistory' }],
   role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role' },
   card: { type: mongoose.Schema.Types.ObjectId, ref: 'GridCard' },
