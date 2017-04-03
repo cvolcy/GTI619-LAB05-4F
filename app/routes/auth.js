@@ -48,15 +48,17 @@ let router = express.Router();
     newUser.info = newInfo;
     newInfo.save().then((info) => {
       console.log(info);
+      newUser.save().then((user) => {
+        console.log(user);
+        User.findById(user.id).populate('card').then((result) => {
+          res.render('index', { result: JSON.stringify(result.card.getDecryptedCard(), null, 2) });
+        })
+      }).catch((err) => {
+        console.log(err);
+      });
     }).catch((err) => {
       console.log(err);
     });
-    newUser.save().then((user) => {
-      console.log(user);
-    }).catch((err) => {
-      console.log(err);
-    });
-    res.redirect('/');
   });
 
   router.get("/signout", (req, res, next) => {
