@@ -7,11 +7,6 @@
     <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
       <div class="container">
         <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-height-indicator"></div>
-              <div class="card-content" style="max-height:100%;overflow-y:auto;">
-                <div class="card-body">
                   <form action="/auth/signup" method="post">
                     <h3>Required</h3>
                     <div class="form-group">
@@ -83,10 +78,7 @@
                       <input class="btn btn-primary btn-raised pull-right" type="submit" value="Sign Up">
                     </div>
                   </form>
-                </div>
-              </div>
-            </div>
-          </div>
+
         </div>
       </div>
     <%- include("partials/footer") %>
