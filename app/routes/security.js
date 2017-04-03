@@ -36,6 +36,14 @@ module.exports = (app) => {
       setting.passwordRules.specialChar = req.body.specialChar;
       setting.session.maxAge = req.body.maxAge;
       setting.save().then((setting) => {
+        let Log = mongoose.model("Log");
+        new Log({
+          message: `Security settings updated`,
+          user: req.user,
+          ip: req.ip,
+          user_agent: req.headers['user-agent']
+        }).save();
+
         res.redirect('/security');
       }).catch((err) => {
         res.redirect('security', { result: JSON.stringify(err) });
