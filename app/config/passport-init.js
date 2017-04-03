@@ -51,16 +51,33 @@ module.exports = function(passport, app) {
     });
   });
 
-  passport.use('local', new LocalStrategy(function(username, password, done) {
+  passport.use('local', new LocalStrategy({ passReqToCallback: true },function(req, username, password, done) {
     let User = mongoose.model("User");
+    let Log = mongoose.model("Log");
     User.findOne().byUsername(username).populate(['role', 'card']).then(function(user) {
       if (!user) {
+        new Log({
+          message: `Try to sign in with incorrect username : '${username}'`,
+          ip: req.ip,
+          user_agent: req.headers['user-agent']
+        }).save();
         return done(null, false, { message: 'Incorrect username.' });
       }
       if (!user.isPasswordValid(password)) {
+        new Log({
+          message: `Try to sign in with incorrect password for user '${username}'`,
+          user: user,
+          ip: req.ip,
+          user_agent: req.headers['user-agent']
+        }).save();
         return done(null, false, { message: 'Incorrect password.' });
       }
-
+      new Log({
+        message: `Successfully sign in with user '${username}'`,
+        user: user,
+        ip: req.ip,
+        user_agent: req.headers['user-agent']
+      }).save();
       return done(null, user);
     });
   }));
