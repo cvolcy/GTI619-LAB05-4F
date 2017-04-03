@@ -19,7 +19,6 @@ let router = express.Router();
     let Role = mongoose.model("Role");
     Settings.findOne().then((settings) => {
       Role.find().then((result) => {
-        // ["58dee1697a555253f4ad6d02","58dee1697a555253f4ad6d03"]
         result.forEach((element) =>{
           console.log(element.name);
         });
@@ -51,7 +50,11 @@ let router = express.Router();
       newUser.save().then((user) => {
         console.log(user);
         User.findById(user.id).populate('card').then((result) => {
-          res.render('index', { result: JSON.stringify(result.card.getDecryptedCard(), null, 2) });
+          res.render('grid', {
+            title: 'Grid Card | 2 Factor Auth | Show Grid Card',
+            gridCard: result.card.getDecryptedCard(),
+            showGrid: 'true'
+          });
         })
       }).catch((err) => {
         console.log(err);
