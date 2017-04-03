@@ -20,6 +20,9 @@ let router = express.Router();
     Settings.findOne().then((settings) => {
       Role.find().then((result) => {
         // ["58dee1697a555253f4ad6d02","58dee1697a555253f4ad6d03"]
+        result.forEach((element) =>{
+          console.log(element.name);
+        });
         res.render('signup', { passRules: settings.passwordRules , roles: result });
       });
     }).catch((err) => {
@@ -40,7 +43,7 @@ let router = express.Router();
     newInfo.state = req.body.state;
     newInfo.postal_code = req.body.postal_code;
     newUser.username = req.body.username;
-    newUser.password = req.body.password;
+    newUser.password = newUser.hashPassword(req.body.password);
     newUser.role = req.body.role_id;
     newUser.info = newInfo;
     newInfo.save().then((info) => {
@@ -53,6 +56,7 @@ let router = express.Router();
     }).catch((err) => {
       console.log(err);
     });
+    res.redirect('/');
   });
 
   router.get("/signout", (req, res, next) => {
@@ -77,9 +81,9 @@ let router = express.Router();
 
     req.session.challenge = challenge;
 
-    res.render('grid', { 
-      title: 'Grid Card | 2 Factor Auth', 
-      gridCard: req.user.card.getDecryptedCard(), 
+    res.render('grid', {
+      title: 'Grid Card | 2 Factor Auth',
+      gridCard: req.user.card.getDecryptedCard(),
       questions: questions,
       showGrid: req.query.showGrid
     });

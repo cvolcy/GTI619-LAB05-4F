@@ -6,72 +6,93 @@
   <body>
     <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
       <div class="container">
-        <form action="/auth/signup" method="post">
-          <div class="form-group">
-            <h3>Required</h3>
-            <label class="col-sm-3 control-label">Username</label>
-            <div class="col-sm-9">
-              <input type="input" class="form-control" name="username" placeholder="Username" required>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-height-indicator"></div>
+              <div class="card-content" style="max-height:100%;overflow-y:auto;">
+                <div class="card-body">
+                  <form action="/auth/signup" method="post">
+                    <h3>Required</h3>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Username</label>
+                      <div class="col-sm-9">
+                        <input type="input" class="form-control" name="username" placeholder="Username" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Password</label>
+                      <div class="col-sm-9">
+                        <input type="password" class="form-control" name="password"
+                        pattern="<%= passRules.number ? '(?=.*\\d)' : '' %><%= passRules.upperlowercase ? '(?=.*[^A-Z])(?=.*[^a-z])' : '' %>.{<%= passRules.minlength %>,<%= passRules.maxlength %>}"
+                        onchange="form.passwordConf.pattern = this.value;"
+                        placeholder="Password" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Repeat Password</label>
+                      <div class="col-sm-9">
+                        <input type="password" class="form-control" id="input-password" name="passwordConf" placeholder="Repeat Password" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Role</label>
+                      <div Class= "col-sm-9">
+                        <select name="role_id" class="col-sm-9 form-control">
+                          <% roles.forEach(function(role){ %>
+                            <% if(role.id == "58dee1697a555253f4ad6d02" | role.id == "58dee1697a555253f4ad6d03" ){ %>
+                              <option value="<%= role.id %>"><%= role.name %></option>
+                            <% } %>
+                          <% }); %>
+                        </select>
+                      </div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <div class="form-group">
+                      <h3>Personal Info</h3>
+                      <label class="col-sm-3 control-label">Name</label>
+                      <div class="col-sm-9">
+                        <input type="input" class="form-control" name="name" placeholder="Name">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Email</label>
+                      <div class="col-sm-9">
+                        <input type="input" class="form-control" name="email" placeholder="Email">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Phone Number</label>
+                      <div class="col-sm-9">
+                        <input type="input" class="form-control" name="phone" placeholder="Phone">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Location</label>
+                      <div class="col-sm-9">
+                        <input type="input" class="form-control" name="street" placeholder="Street">
+                        <input type="input" class="form-control" name="city" placeholder="City">
+                        <input type="input" class="form-control" name="state" placeholder="State">
+                        <input type="input" class="form-control" name="postal_code" placeholder="Postal Code">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="btn btn-default">
+                          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                          Sign Up
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Password</label>
-            <div class="col-sm-9">
-              <input type="password" class="form-control" name="password"
-              pattern="<%= passRules.number ? '(?=.*\\d)' : '' %><%= passRules.upperlowercase ? '(?=.*[^A-Z])(?=.*[^a-z])' : '' %>.{<%= passRules.minlength %>,<%= passRules.maxlength %>}"
-              onchange="form.passwordConf.pattern = this.value;"
-              placeholder="Password" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="input-password" class="col-sm-3 control-label">Repeat Password</label>
-            <div class="col-sm-9">
-              <input type="password" class="form-control" id="input-password" name="passwordConf" placeholder="Repeat Password" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="input-password" class="col-sm-3 control-label">Roke</label>
-            <div class="col-sm-9">
-              <input type="password" class="form-control" id="input-password" name="passwordConf" placeholder="Repeat Password" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <h3>Personal Info</h3>
-            <label class="col-sm-3 control-label">Name</label>
-            <div class="col-sm-9">
-              <input type="input" class="form-control" name="name" placeholder="Name">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Email</label>
-            <div class="col-sm-9">
-              <input type="input" class="form-control" name="email" placeholder="Email">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Phone Number</label>
-            <div class="col-sm-9">
-              <input type="input" class="form-control" name="phone" placeholder="Phone">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">Location</label>
-            <div class="col-sm-9">
-              <input type="input" class="form-control" name="street" placeholder="Street">
-              <input type="input" class="form-control" name="city" placeholder="City">
-              <input type="input" class="form-control" name="state" placeholder="State">
-              <input type="input" class="form-control" name="postal_code" placeholder="Postal Code">
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-sm-offset-3 col-sm-9">
-              <button type="submit" class="btn btn-default">
-                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                Sign Up
-              </button>
-            </div>
-          </div>
-        </form>
+        </div>
       </div>
     <%- include("partials/footer") %>
   </body>
