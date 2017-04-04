@@ -38,15 +38,10 @@ console.log(oldPassword);
                                 message: 'The new password and validation password doesnt match.'
                             };
 
-                        }else if (req.body.password_val !== req.body.password_new){
-                            var message = {
-                                message: 'Incorrect validation password.'
-                            };
-
                         }else{
                             var countSame = 0;
                             req.user.passwordHistory.forEach(function(value){
-                                if(bcrypt.compareSync(value, uPass)) {
+                                if(bcrypt.compareSync(oldPassword, value)  || bcrypt.compareSync(value, uPass)) {
                                     countSame += 1;
                                 }
                             });
