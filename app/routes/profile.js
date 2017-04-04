@@ -17,8 +17,61 @@ module.exports = function(app) {
         });
     });
     router.post('/password', isLoggedIn, function(req, res) {
-        res.send("password");
-    });
+
+
+            var uId = req.user.id;
+            var uPass = req.user.password;
+            var oldPassword = req.body.password;
+            var newPassword = req.body.password_new;
+            var valPassword = req.body.password_val;
+            var bcrypt = require('bcrypt');
+
+            //bcrypt.compareSync(oldPassword, hashnew); // true
+            //bcrypt.compareSync("not my password", hashnew); // false
+console.log(oldPassword);
+                        if (!bcrypt.compareSync(oldPassword, uPass)) {
+                            var message = {
+                                message: 'Incorrect password.'
+                            };
+                        }else if (valPassword !== newPassword){
+                            var message = {
+                                message: 'The new password and validation password doesnt match.'
+                            };
+
+                        }else if (req.body.password_val !== req.body.password_new){
+                            var message = {
+                                message: 'Incorrect validation password.'
+                            };
+
+                        }else{
+                            var countSame = 0;
+                            req.user.passwordHistory.forEach(function(value){
+                                if(bcrypt.compareSync(value, uPass)) {
+                                    countSame += 1;
+                                }
+                            });
+                            if(countSame == 0){
+                                req.user.password = newPassword;
+                                /*                            user.save(function(err) {
+                                 req.logIn(user, function(err) {
+                                 done(err, user);
+                                 });
+                                 });*/
+
+                                var message = {
+                                    message: 'Success! Your password has been changed.'
+                                };
+
+                            }else{
+
+                                var message = {
+                                    message: 'Your new password must not be the same as one of your old passwords..'
+                                };
+                            }
+                            res.send( message);
+                        }
+                    });
+
     router.post('/email', isLoggedIn, function(req, res) {
         res.send("email");
     });

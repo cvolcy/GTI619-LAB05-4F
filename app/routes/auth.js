@@ -3,11 +3,10 @@ const express = require('express');
 module.exports = function(passport) {
 
 let router = express.Router();
-
   router.get("/signin", (req, res, next) => {
     res.render('signin');
   });
-
+passport.all
   router.post('/signin', passport.authenticate('local', {
   	successRedirect : '/repertoire/residentiel', //pour tester
     failureRedirect : '/auth/signin'
