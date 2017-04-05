@@ -61,7 +61,10 @@ module.exports = function(passport, app) {
           ip: req.ip,
           user_agent: req.headers['user-agent']
         }).save();
-        return done(null, false, req.flash('signInMessage','The user is blocked' ));
+        let msg = user.block.deepBlock ? `The user is blocked contact the administration to unblock the account.`
+          : `The user is blocked until : ${user.block.expire_at.toLocaleString()}`;
+          
+        return done(null, false, req.flash('signInMessage',msg ));
       }
 
       if (!user) {
@@ -72,22 +75,41 @@ module.exports = function(passport, app) {
         }).save();
         return done(null, false, req.flash('signInMessage','Incorrect username.' ));
       }
-      if (!user.isPasswordValid(password)) {
+      if (!user.isPasswordValid(password, true)) {
+        let SecuritySettings = mongoose.model('SecuritySettings');
+
+        SecuritySettings.findOne({}).then((settings) => {
+          if (settings.bruteforce.maxAttempt <= user.block.numberOfTry) {
+            user.block.deepBlock = true;
+          } else {
+            let expire_at = new Date();
+            expire_at.setSeconds(expire_at.getSeconds() + settings.bruteforce.delay);
+            
+            user.block.expire_at = expire_at;
+          }
+
+          user.save();
+
+          new Log({
+            message: `Try to sign in with incorrect password for user '${username}'`,
+            user: user,
+            ip: req.ip,
+            user_agent: req.headers['user-agent']
+          }).save();
+
+          return done(null, false, req.flash('signInMessage','Incorrect password.' ));
+        });
+      } else {
         new Log({
-          message: `Try to sign in with incorrect password for user '${username}'`,
+          message: `Successfully sign in with user '${username}'`,
           user: user,
           ip: req.ip,
           user_agent: req.headers['user-agent']
         }).save();
-        return done(null, false, req.flash('signInMessage','Incorrect password.' ));
+        user.block.numberOfTry = 0;
+        user.save();
+        return done(null, user);
       }
-      new Log({
-        message: `Successfully sign in with user '${username}'`,
-        user: user,
-        ip: req.ip,
-        user_agent: req.headers['user-agent']
-      }).save();
-      return done(null, user);
     });
   }));
 }
