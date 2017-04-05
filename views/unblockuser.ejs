@@ -28,7 +28,7 @@
                         <td><%= user.id %></td>
                         <td><%= user.username %></td>
                         <td><%= user.block.deepBlock %></td>
-                        <td><%= user.block.expire_at.toLocaleString() %></td>
+                        <td><%= (user.block.expire_at) ? user.block.expire_at.toLocaleString() : '' %></td>
                         <td><a href="/security/unblockuser/<%= user.id %>">unblock</a></td>
                       </tr>
                     <% }) %>
