@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <%- include("partials/head", {title: "Accueil"}) %>
+  </head>
+  <body>
+    <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-height-indicator"></div>
+            <div class="card-content" style="max-height:100%;overflow-y:auto;">
+              <div class="card-body">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>username</th>
+                      <th>Deep Blocked</th>
+                      <th>Block until</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% users.forEach((user) => { %>
+                      <tr>
+                        <td><%= user.id %></td>
+                        <td><%= user.username %></td>
+                        <td><%= user.block.deepBlock %></td>
+                        <td><%= user.block.expire_at.toLocaleString() %></td>
+                        <td><a href="/security/unblockuser/<%= user.id %>">unblock</a></td>
+                      </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include("partials/footer") %>
+  </body>
+</html>

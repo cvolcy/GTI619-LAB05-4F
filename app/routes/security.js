@@ -53,5 +53,25 @@ module.exports = (app) => {
     });
   });
 
+  router.get('/unblockuser', app.locals.authorizeFor("administrateur"), (req, res, next) => {
+    let User = mongoose.model("User");
+
+    User.find({ $or:[ { 'block.expire_at': { $gt : new Date() } }, { 'block.deepBlock': true } ] }).then((users) => {
+      res.render('unblockuser', { users: users });
+    });
+  })
+  
+  router.get('/unblockuser/:user_id', app.locals.authorizeFor("administrateur"), (req, res, next) => {
+    let User = mongoose.model("User");
+
+    User.findById(req.params.user_id).then((user) => {
+      user.block.deepBlock = false;
+      user.block.expire_at = null;
+      user.save().then((u) => {
+        res.redirect('/security/unblockuser');
+      });
+    });
+  })
+
   return router;
 }
