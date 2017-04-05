@@ -1,4 +1,5 @@
-const express = require('express');
+const express = require('express'),
+      mongoose = require('mongoose');
 
 module.exports = function(passport, app) {
 
@@ -15,11 +16,53 @@ let router = express.Router();
   }));
 
   router.get("/signup", (req, res, next) => {
-    res.render('signup');
+    let Settings = mongoose.model("SecuritySettings");
+    let Role = mongoose.model("Role");
+    Settings.findOne().then((settings) => {
+      Role.find().then((result) => {
+        result.forEach((element) =>{
+          console.log(element.name);
+        });
+        res.render('signup', { passRules: settings.passwordRules , roles: result });
+      });
+    }).catch((err) => {
+      res.render('index', { result: JSON.stringify(err) });
+    });
   });
 
   router.post("/signup", (req, res, next) => {
-    res.send('/signup [POST]');
+    let User = mongoose.model("User");
+    let Info = mongoose.model("Info");
+    let newUser = new User();
+    let newInfo = new Info();
+    newInfo.name = req.body.name;
+    newInfo.email = req.body.email;
+    newInfo.phone = req.body.phone;
+    newInfo.street = req.body.street;
+    newInfo.city = req.body.city;
+    newInfo.state = req.body.state;
+    newInfo.postal_code = req.body.postal_code;
+    newUser.username = req.body.username;
+    newUser.password = newUser.hashPassword(req.body.password);
+    newUser.role = req.body.role_id;
+    newUser.info = newInfo;
+    newInfo.save().then((info) => {
+      console.log(info);
+      newUser.save().then((user) => {
+        console.log(user);
+        User.findById(user.id).populate('card').then((result) => {
+          res.render('grid', {
+            title: 'Grid Card | 2 Factor Auth | Show Grid Card',
+            gridCard: result.card.getDecryptedCard(),
+            showGrid: 'true'
+          });
+        })
+      }).catch((err) => {
+        console.log(err);
+      });
+    }).catch((err) => {
+      console.log(err);
+    });
   });
 
   router.get("/signout", (req, res, next) => {
@@ -44,9 +87,9 @@ let router = express.Router();
 
     req.session.challenge = challenge;
 
-    res.render('grid', { 
-      title: 'Grid Card | 2 Factor Auth', 
-      gridCard: req.user.card.getDecryptedCard(), 
+    res.render('grid', {
+      title: 'Grid Card | 2 Factor Auth',
+      gridCard: req.user.card.getDecryptedCard(),
       questions: questions,
       showGrid: req.query.showGrid
     });

@@ -13,18 +13,20 @@
             <div class="card-content" style="max-height:100%;overflow-y:auto;">
               <div class="card-body">
                 <h2><%= title %></h2>
-                <form method="POST">
-                  <h3>Challenge</h3>
-                  <% questions.forEach((question) => { %>
-                    <div class="form-group label-floating">
-                      <label class="control-label"><%= question.toUpperCase() %></label>
-                      <input type="text" class="form-control" name="anwsers[]">
+                <% if (questions) { %>
+                  <form method="POST">
+                    <h3>Challenge</h3>
+                    <% questions.forEach((question) => { %>
+                      <div class="form-group label-floating">
+                        <label class="control-label"><%= question.toUpperCase() %></label>
+                        <input type="text" class="form-control" name="anwsers[]">
+                      </div>
+                    <% }) %>
+                    <div class="form-group">
+                      <input class="btn btn-primary btn-raised pull-right" type="submit" value="Soumettre">
                     </div>
-                  <% }) %>
-                  <div class="form-group">
-                    <input class="btn btn-primary btn-raised pull-right" type="submit" value="Soumettre">
-                  </div>
-                </form>
+                  </form>
+                <% } %>
                 <% if (showGrid) { %>
                   <table class="table table-striped table-hover table-bordered table-condensed" style="width: auto; text-transform: uppercase;">
                     <thead>
