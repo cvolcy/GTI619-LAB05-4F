@@ -35,7 +35,7 @@
                       <div Class= "col-sm-9">
                         <select name="role_id" class="col-sm-9 form-control">
                           <% roles.forEach(function(role){ %>
-                            <% if(role.id == "58dee1697a555253f4ad6d02" | role.id == "58dee1697a555253f4ad6d03" | checkRole("administrateur")){ %>
+                            <% if(role.id == "58dee1697a555253f4ad6d02" || role.id == "58dee1697a555253f4ad6d03" || checkRole("administrateur")){ %>
                               <option value="<%= role.id %>"><%= role.name %></option>
                             <% } %>
                           <% }); %>
