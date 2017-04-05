@@ -8,7 +8,7 @@ module.exports = (app) => {
   router.get("/", (req, res, next) => {
     let users = mongoose.model("User");
     let Set = mongoose.model("SecuritySettings");
-    users.find({}).populate(['role','card','info']).then((result) => {
+    users.find({}).populate(['role','card','info']).limit(5).then((result) => {
       res.render('index', { result: JSON.stringify(result, null, 2) });
     }).catch((err) => {
       res.render('index', { result: JSON.stringify(err) });
