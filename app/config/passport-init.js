@@ -9,7 +9,7 @@ module.exports = function(passport, app) {
     });
 
     // Pour avoir accès à ces variables dans les vues.
-
+    res.locals.flash = req.flash();
     app.locals.isAuthenticated = req.isAuthenticated() && req.session.twoFactorAuth == true;
     app.locals.user = req.user;
     app.locals.role = req.isAuthenticated() ? req.user.role.name : null;
@@ -51,16 +51,42 @@ module.exports = function(passport, app) {
     });
   });
 
-  passport.use('local', new LocalStrategy(function(username, password, done) {
+  passport.use('local', new LocalStrategy({ passReqToCallback: true },function(req, username, password, done) {
     let User = mongoose.model("User");
+    let Log = mongoose.model("Log");
     User.findOne().byUsername(username).populate(['role', 'card']).then(function(user) {
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.isPasswordValid(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
+      if (user.block.deepBlock || user.block.expire_at > (new Date())) {
+        new Log({
+          message: `Try to sign in to a blocked user : '${username}'`,
+          ip: req.ip,
+          user_agent: req.headers['user-agent']
+        }).save();
+        return done(null, false, req.flash('signInMessage','The user is blocked' ));
       }
 
+      if (!user) {
+        new Log({
+          message: `Try to sign in with incorrect username : '${username}'`,
+          ip: req.ip,
+          user_agent: req.headers['user-agent']
+        }).save();
+        return done(null, false, req.flash('signInMessage','Incorrect username.' ));
+      }
+      if (!user.isPasswordValid(password)) {
+        new Log({
+          message: `Try to sign in with incorrect password for user '${username}'`,
+          user: user,
+          ip: req.ip,
+          user_agent: req.headers['user-agent']
+        }).save();
+        return done(null, false, req.flash('signInMessage','Incorrect password.' ));
+      }
+      new Log({
+        message: `Successfully sign in with user '${username}'`,
+        user: user,
+        ip: req.ip,
+        user_agent: req.headers['user-agent']
+      }).save();
       return done(null, user);
     });
   }));

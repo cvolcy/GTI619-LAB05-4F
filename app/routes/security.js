@@ -36,6 +36,14 @@ module.exports = (app) => {
       setting.passwordRules.specialChar = req.body.specialChar;
       setting.session.maxAge = req.body.maxAge;
       setting.save().then((setting) => {
+        let Log = mongoose.model("Log");
+        new Log({
+          message: `Security settings updated`,
+          user: req.user,
+          ip: req.ip,
+          user_agent: req.headers['user-agent']
+        }).save();
+
         res.redirect('/security');
       }).catch((err) => {
         res.redirect('security', { result: JSON.stringify(err) });
@@ -44,6 +52,26 @@ module.exports = (app) => {
       res.render('index', { result: JSON.stringify(err) });
     });
   });
+
+  router.get('/unblockuser', app.locals.authorizeFor("administrateur"), (req, res, next) => {
+    let User = mongoose.model("User");
+
+    User.find({ $or:[ { 'block.expire_at': { $gt : new Date() } }, { 'block.deepBlock': true } ] }).then((users) => {
+      res.render('unblockuser', { users: users });
+    });
+  })
+  
+  router.get('/unblockuser/:user_id', app.locals.authorizeFor("administrateur"), (req, res, next) => {
+    let User = mongoose.model("User");
+
+    User.findById(req.params.user_id).then((user) => {
+      user.block.deepBlock = false;
+      user.block.expire_at = null;
+      user.save().then((u) => {
+        res.redirect('/security/unblockuser');
+      });
+    });
+  })
 
   return router;
 }
