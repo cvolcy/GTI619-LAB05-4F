@@ -3,6 +3,10 @@ const mongoose = require('mongoose'),
 
 let userSchema = new mongoose.Schema({
   username: { type : String, unique : true, required : true },
+  block: {
+    deepBlock: { type: Boolean, default: false },
+    expire_at: { type: Date, default: null }
+  },
   password: {
     type : String,
     set: function(newPass) {

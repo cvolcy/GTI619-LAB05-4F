@@ -6,6 +6,12 @@
   <body>
     <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
       <div class="container">
+        <% if (flash.signInMessage) { %>
+          <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <%= flash.signInMessage %>
+          </div>
+        <% } %>
         <form action="/auth/signin" method="post">
           <div class="form-group">
             <label for="input-username" class="col-sm-3 control-label">Username</label>
