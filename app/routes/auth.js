@@ -10,7 +10,8 @@ let router = express.Router();
 
   router.post('/signin', passport.authenticate('local', {
   	successRedirect : '/auth/grid', //pour tester
-    failureRedirect : '/auth/signin'
+    failureRedirect : '/auth/signin',
+    failureFlash : true
   }));
 
   router.get("/signup", (req, res, next) => {
