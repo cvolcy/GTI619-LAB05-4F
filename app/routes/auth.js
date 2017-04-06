@@ -124,7 +124,7 @@ let router = express.Router();
       }
       let diff = Date.now() - new Date(lastUpdate);
       SecuritySettings.findOne().then((result) => {
-        if (diff > result.passwordChange.renewalDelay) {
+        if (diff > result.passwordChange.renewalDelay && result.passwordChange.renewalDelay != 0) {
           req.flash('renewalMessage','your password has expired!' );
           return res.redirect('/profile/');
         } else {
