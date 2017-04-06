@@ -29,9 +29,9 @@ module.exports = function(app) {
 
     User.findById(req.user.id).populate('passwordHistory').then((user) => {
       if (!isPasswordValid) {
-        var msg = 'Incorrect password.';
+        req.flash('resetPasswordMessage', 'Incorrect password.');
       } else if (valPassword !== newPassword) {
-        var msg = 'The new password and validation password doesnt match.';
+        req.flash('resetPasswordMessage', 'The new password and validation password doesnt match.');
       } else {
         let passExist = false;
         user.passwordHistory.every(function(value){
@@ -49,9 +49,9 @@ module.exports = function(app) {
           }).catch((err) => {
             console.log(err);
           });
-          var msg = 'Success! Your password has been changed.';
+          req.flash('resetPasswordsuccess', 'Success! Your password has been changed.');
         } else {
-          var msg = 'Your new password must not be the same as one of your old passwords..';
+          req.flash('resetPasswordMessage', 'Your new password must not be the same as one of your old passwords..');
         }
         console.log(msg);
         res.redirect('/profile');
