@@ -100,18 +100,21 @@ let router = express.Router();
       res.redirect('/auth/signin');
     }
 
-    let gridCard = req.user.card.getDecryptedCard();
-    let anwsers = req.body.anwsers.map((a) => a.toLowerCase());
-    for (var i = 0; i < req.session.challenge.length; i++) {
-      let key = req.session.challenge[i][0];
-      let index = req.session.challenge[i][1];
-
-      if (anwsers.indexOf(gridCard[key][index]) === -1) {
-        return res.redirect('/auth/grid');
-      }
-    }
+    // let gridCard = req.user.card.getDecryptedCard();
+    // let anwsers = req.body.anwsers.map((a) => a.toLowerCase());
+    // for (var i = 0; i < req.session.challenge.length; i++) {
+    //   let key = req.session.challenge[i][0];
+    //   let index = req.session.challenge[i][1];
+    //
+    //   if (anwsers.indexOf(gridCard[key][index]) === -1) {
+    //     return res.redirect('/auth/grid');
+    //   }
+    // }
     req.session.twoFactorAuth = true;
+    return res.redirect('/auth/renewal');
+  });
 
+  router.get('/renewal', (req, res, next) => {
     let User = mongoose.model("User");
     let SecuritySettings = mongoose.model("SecuritySettings");
     User.findById(req.user.id).populate('passwordHistory').then((user) => {
