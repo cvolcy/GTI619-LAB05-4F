@@ -111,7 +111,27 @@ let router = express.Router();
       }
     }
     req.session.twoFactorAuth = true;
-    return res.redirect('/');
+
+    let User = mongoose.model("User");
+    let SecuritySettings = mongoose.model("SecuritySettings");
+    User.findById(req.user.id).populate('passwordHistory').then((user) => {
+      let passwordHistory = user.passwordHistory[user.passwordHistory.length - 1];
+      let lastUpdate;
+      if (passwordHistory) {
+        lastUpdate = passwordHistory.updated_at;
+      } else {
+        lastUpdate = user.created_at;
+      }
+      let diff = Date.now() - new Date(lastUpdate);
+      SecuritySettings.findOne().then((result) => {
+        if (diff > result.passwordChange.renewalDelay) {
+          req.flash('renewalMessage','your password has expired!' );
+          return res.redirect('/profile/');
+        } else {
+          return res.redirect('/');
+        }
+      });
+    });
   });
 
   return router;

@@ -6,6 +6,12 @@
   <body>
     <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
     <div class="container">
+      <% if (flash.renewalMessage) { %>
+        <div class="alert alert-dismissible alert-warning">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <%= flash.renewalMessage %>
+        </div>
+      <% } %>
       <div class="col-sm-12">
         <div class="well">
           <strong>User id</strong>: <%= user._id %><br>
