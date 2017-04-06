@@ -20,5 +20,18 @@ module.exports = (app) => {
     // });
   });
 
+  router.get('/about', (req, res, next) => {
+    res.render('about');
+  });
+
+  router.get('/contact', (req, res, next) => {
+    res.render('contact');
+  });
+
+  router.post('/contact', (req, res, next) => {
+    req.flash('contact', 'Your message has been succesfully send. The administrator will contacts you.')
+    res.render('contact');
+  });
+
   return router;
 }

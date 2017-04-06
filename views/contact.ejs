@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <%- include("partials/head", { title: "Contact" }) %>
+</head>
+<body>
+  <%- include("partials/nav", { title: "GTI619 - Lab 05" }) %>
+  <div class="container">
+    <% if (flash.contact) { %>
+      <div class="alert alert-dismissible alert-primary">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <%= flash.contact %>
+      </div>
+    <% } %>
+    <div class="col-md-12">
+      <div class="card" style="max-height: 400px;">
+        <div class="card-height-indicator"></div>
+        <div class="card-content" style="max-height:100%;overflow-y:auto;">
+          <div class="card-body">
+            <h2>Contact</h2>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="Name" autocomplete="off" id="Name" placeholder="Name">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="email" class="form-control" name="email" autocomplete="off" id="email" placeholder="E-mail">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <textarea class="form-control textarea" rows="3" name="Message" id="Message" placeholder="Message"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <form method="POST">
+                  <button type="submit" class="btn main-btn pull-right">Send a message</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include("partials/footer") %>
+</body>
+</html>
