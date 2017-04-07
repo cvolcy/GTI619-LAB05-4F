@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <%- include("partials/head", {title: title}) %>
+</head>
+<body>
+  <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+
+    <div class="card">
+      <div class="card-height-indicator"></div>
+      <div class="card-content" style="max-height:100%;overflow-y:auto;">
+        <div class="card-body">
+          <h2><%= title %></h2>
+          <h4>des <%= logs.length %> dernières entrées.</h4>
+          <table class="table table-striped table-hover ">
+            <thead>
+              <tr>
+                <th>Message</th>
+                <th>IP</th>
+                <th>User</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% logs.forEach((log) => { %>
+                <tr>
+                  <td><%= log.message %></td>
+                  <td><%= log.ip %></td>
+                  <td><%= log.user.username %></td>
+                  <td><%= log.created_at.toLocaleString() %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+      </div>
+    </div>
+
+  </div>
+  <%- include("partials/footer") %>
+</body>
+</html>
