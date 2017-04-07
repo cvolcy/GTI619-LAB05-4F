@@ -96,21 +96,32 @@ passport.all
 
   router.post('/grid', (req, res, next) => {
     if (!req.isAuthenticated()) {
+      console.log(req.user);
       res.redirect('/auth/signin');
     }
-
-    // let gridCard = req.user.card.getDecryptedCard();
-    // let anwsers = req.body.anwsers.map((a) => a.toLowerCase());
-    // for (var i = 0; i < req.session.challenge.length; i++) {
-    //   let key = req.session.challenge[i][0];
-    //   let index = req.session.challenge[i][1];
-    //
-    //   if (anwsers.indexOf(gridCard[key][index]) === -1) {
-    //     return res.redirect('/auth/grid');
-    //   }
-    // }
+    console.log(req.user);
+    let gridCard = req.user.card.getDecryptedCard();
+    let anwsers = req.body.anwsers.map((a) => a.toLowerCase());
+    for (var i = 0; i < req.session.challenge.length; i++) {
+      let key = req.session.challenge[i][0];
+      let index = req.session.challenge[i][1];
+    
+      if (anwsers.indexOf(gridCard[key][index]) === -1) {
+        return res.redirect('/auth/grid');
+      }
+    }
     req.session.twoFactorAuth = true;
-    return res.redirect('/auth/renewal');
+    next();
+  });
+
+  router.post('*', (req, res, next) => {
+    let SecuritySettings = mongoose.model("SecuritySettings");
+    SecuritySettings.findOne().then((settings) => {
+      if (settings.passwordChange.renewalDelay > 0) {
+        return res.redirect('/auth/renewal');
+      }
+      return res.redirect('/');
+    });
   });
 
   router.get('/renewal', (req, res, next) => {
@@ -127,7 +138,10 @@ passport.all
       let diff = Date.now() - new Date(lastUpdate);
       SecuritySettings.findOne().then((result) => {
         if (diff > result.passwordChange.renewalDelay && result.passwordChange.renewalDelay != 0) {
-          req.flash('renewalMessage','your password has expired!' );
+          req.flash('message', { 
+            text: 'your password has expired! its might be the right time to change it',
+            type: 'warning' 
+          });
           return res.redirect('/profile/');
         } else {
           return res.redirect('/');
