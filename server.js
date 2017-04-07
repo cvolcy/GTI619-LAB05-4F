@@ -10,7 +10,7 @@ const http     = require('http'),
     session    = require('express-session'),
     path       = require('path'),
     fs         = require('fs'),
-    MongoStore = require('connect-mongo')(session),
+    RedisStore = require('connect-redis')(session),
     flash      = require('connect-flash'),
     csurf      = require('csurf');
 
@@ -42,7 +42,7 @@ app.use(session({
     secure: true,
     maxAge: 1000 * 10
   },
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
+  store: new RedisStore({ url: "redis://redistogo:98e208b6e6a79195212ae2d0b44d0659@barreleye.redistogo.com:9581/" })
 }));
 app.use(flash());
 app.use(passport.initialize());
