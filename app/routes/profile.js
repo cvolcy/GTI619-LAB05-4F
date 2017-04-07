@@ -34,12 +34,8 @@ module.exports = function(app) {
         });
       } else {
         let passExist = user.passwordHistory.find(function(value){
-          let e = bcrypt.compareSync(newPassword, value.password);
-          console.log(e);
-          return e;
+          return bcrypt.compareSync(newPassword, value.password);
         }) && user.passwordHistory.length;
-
-        console.log('passExist', passExist);
 
         if(!passExist && oldPassword != newPassword) {
           user.password = user.hashPassword(newPassword);
