@@ -5,7 +5,8 @@ let userSchema = new mongoose.Schema({
   username: { type : String, unique : true, required : true },
   block: {
     deepBlock: { type: Boolean, default: false },
-    expire_at: { type: Date, default: null }
+    expire_at: { type: Date, default: null },
+    numberOfTry: { type: Number, default: 0 }
   },
   password: {
     type : String,
@@ -27,7 +28,12 @@ userSchema.methods.hashPassword = (password) => {
   return bcrypt.hashSync(password, salt);
 }
 
-userSchema.methods.isPasswordValid = function(password) {
+userSchema.methods.isPasswordValid = function(password, increment = false) {
+  if (increment) {
+    this.block.numberOfTry += 1;
+    this.save();
+  }
+
   return bcrypt.compareSync(password, this.password);
 };
 
