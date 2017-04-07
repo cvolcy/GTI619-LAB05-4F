@@ -71,7 +71,14 @@ module.exports = (app) => {
         res.redirect('/security/unblockuser');
       });
     });
-  })
+  });
+
+  router.get('/journal', app.locals.authorizeFor("administrateur"), (req, res, next) => {
+    let Log = mongoose.model('Log');
+    Log.find().populate('user').limit(20).sort({ created_at: 'desc' }).then((logs) => {
+      res.render('logs', { title: 'Journal', logs: logs });
+    })
+  });
 
   return router;
 }

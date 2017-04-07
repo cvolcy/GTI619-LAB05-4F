@@ -19,6 +19,7 @@ module.exports = function(app) {
   router.post('/password', isLoggedIn, function(req, res) {
     let bcrypt = require('bcrypt');
     let User = mongoose.model("User");
+    let Log = mongoose.model("Log");
 
     let oldPassword = req.body.password;
     let newPassword = req.body.password_new;
@@ -27,6 +28,12 @@ module.exports = function(app) {
     User.findById(req.user.id).populate('passwordHistory').then((user) => {
       if (!req.user.isPasswordValid(oldPassword)) {
         req.flash('message', { text: 'Incorrect password.', type: 'danger' });
+        new Log({
+          message: `Try to update password failed due to bad password`,
+          user: user,
+          ip: req.ip,
+          user_agent: req.headers['user-agent']
+        }).save();
       } else if (valPassword !== newPassword) {
         req.flash('message', { 
           text: 'The new password and validation password doesnt match.',
@@ -45,11 +52,23 @@ module.exports = function(app) {
             text: 'Success! Your password has been changed.',
             type: 'success'
           });
+          new Log({
+            message: `Password updated`,
+            user: user,
+            ip: req.ip,
+            user_agent: req.headers['user-agent']
+          }).save();
         } else {
           req.flash('message', { 
             text: 'Your new password must not be the same as one of your old passwords.', 
             type: 'danger'
           });
+          new Log({
+            message: `Try to update password with old password.`,
+            user: user,
+            ip: req.ip,
+            user_agent: req.headers['user-agent']
+          }).save();
         }
       }
       res.redirect('/profile');
