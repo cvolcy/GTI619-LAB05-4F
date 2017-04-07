@@ -96,10 +96,8 @@ passport.all
 
   router.post('/grid', (req, res, next) => {
     if (!req.isAuthenticated()) {
-      console.log(req.user);
       res.redirect('/auth/signin');
     }
-    console.log(req.user);
     let gridCard = req.user.card.getDecryptedCard();
     let anwsers = req.body.anwsers.map((a) => a.toLowerCase());
     for (var i = 0; i < req.session.challenge.length; i++) {
