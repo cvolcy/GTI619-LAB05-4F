@@ -15,6 +15,7 @@
                 <h2><%= title %></h2>
                 <% if (questions) { %>
                   <form method="POST">
+                    <input type="hidden" name='_csrf' value="<%= _csrf %>">
                     <h3>Challenge</h3>
                     <% questions.forEach((question) => { %>
                       <div class="form-group label-floating">

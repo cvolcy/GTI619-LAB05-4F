@@ -13,6 +13,7 @@
             <div class="card-content" style="max-height:100%;overflow-y:auto;">
               <div class="card-body">
                 <form action="/security/setting" method="post">
+                  <input type="hidden" name='_csrf' value="<%= _csrf %>">
                   <h3>Brute Force</h3>
                   <div class="form-group">
                     <label class="col-sm-3">Max Attempt</label>
