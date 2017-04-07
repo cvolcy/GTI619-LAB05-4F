@@ -71,9 +71,23 @@ passport.all
   });
 
   router.get('/grid', (req, res, next) => {
+    let SecuritySettings = mongoose.model('SecuritySettings');
+
+    SecuritySettings.findOne({}).then((settings) => {
+      console.log(settings.passwordChange);
+      if (!settings.passwordChange.strongAuthentication) {
+        req.session.twoFactorAuth = true;
+        return res.redirect('/');
+      }
+      return next();
+    });
+  })
+
+  router.get('/grid', (req, res, next) => {
     if (!req.isAuthenticated()) {
       res.redirect('/auth/signin');
     }
+
     let questions = [];
     let challenge = []
     let keys = Object.keys(req.user.card.getDecryptedCard());
