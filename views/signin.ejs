@@ -13,6 +13,7 @@
           </div>
         <% } %>
         <form action="/auth/signin" method="post">
+          <input type="hidden" name='_csrf' value="<%= _csrf %>">
           <div class="form-group">
             <label for="input-username" class="col-sm-3 control-label">Username</label>
             <div class="col-sm-9">
