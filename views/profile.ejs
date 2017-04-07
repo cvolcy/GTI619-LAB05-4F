@@ -6,17 +6,20 @@
   <body>
     <%- include("partials/nav", {title: "GTI619 - Lab 05"}) %>
     <div class="container">
-      <% if (flash.resetPasswordMessage) { %>
-        <div class="alert alert-dismissible alert-warning">
-          <button type="button" class="close" data-dismiss="alert">×</button>
-          <%= flash.resetPasswordMessage %>
-        </div>
-      <% } %>
-      <% if (flash.resetPasswordsuccessMessage) { %>
-        <div class="alert alert-dismissible alert-success">
-          <button type="button" class="close" data-dismiss="alert">×</button>
-          <%= flash.resetPasswordMessage %>
-        </div>
+      <% if (flash.message) { %>
+        <% if (flash.message instanceof Array) { %>
+          <% flash.message.forEach(msg => { %>
+              <div class="alert alert-dismissible alert-<%= msg.type %>">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <%= msg.text %>
+              </div>
+          <% }) %>
+        <% } else { %>
+          <div class="alert alert-dismissible alert-<%= flash.message.type %>">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <%= flash.message.text %>
+          </div>
+        <% } %>
       <% } %>
       <div class="col-sm-12">
         <div class="well">

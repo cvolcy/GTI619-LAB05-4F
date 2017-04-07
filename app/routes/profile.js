@@ -13,49 +13,46 @@ module.exports = function(app) {
   // we will want this protected so you have to be logged in to visit
   // we will use route middleware to verify this (the isLoggedIn function)
   router.get('/', isLoggedIn, function(req, res) {
-      res.render('profile.ejs', {
-          user : req.user // get the user out of session and pass to template
-      });
+      res.render('profile.ejs');
   });
 
   router.post('/password', isLoggedIn, function(req, res) {
     let bcrypt = require('bcrypt');
     let User = mongoose.model("User");
-    var uPass = req.user.password;
-    var oldPassword = req.body.password;
-    var newPassword = req.body.password_new;
-    var valPassword = req.body.password_val;
-    let isPasswordValid = bcrypt.compareSync(oldPassword, uPass);
+
+    let oldPassword = req.body.password;
+    let newPassword = req.body.password_new;
+    let valPassword = req.body.password_val;
 
     User.findById(req.user.id).populate('passwordHistory').then((user) => {
-      if (!isPasswordValid) {
-        req.flash('resetPasswordMessage', 'Incorrect password.');
+      if (!req.user.isPasswordValid(oldPassword)) {
+        req.flash('message', { text: 'Incorrect password.', type: 'danger' });
       } else if (valPassword !== newPassword) {
-        req.flash('resetPasswordMessage', 'The new password and validation password doesnt match.');
-      } else {
-        let passExist = false;
-        user.passwordHistory.every(function(value){
-          if(bcrypt.compareSync(newPassword, value.password)) {
-            passExist = true;
-            return false;
-          } else {
-            return true;
-          }
+        req.flash('message', { 
+          text: 'The new password and validation password doesnt match.',
+          type: 'warning'
         });
+      } else {
+        let passExist = user.passwordHistory.find(function(value){
+          return bcrypt.compareSync(newPassword, value.password);
+        }) && user.passwordHistory.length;
+
         if(!passExist && oldPassword != newPassword) {
           user.password = user.hashPassword(newPassword);
-          user.save().then((user) => {
-            console.log(user.id);
-          }).catch((err) => {
-            console.log(err);
+          user.save().catch((err) => {
           });
-          req.flash('resetPasswordsuccess', 'Success! Your password has been changed.');
+          req.flash('message', { 
+            text: 'Success! Your password has been changed.',
+            type: 'success'
+          });
         } else {
-          req.flash('resetPasswordMessage', 'Your new password must not be the same as one of your old passwords..');
+          req.flash('message', { 
+            text: 'Your new password must not be the same as one of your old passwords.', 
+            type: 'danger'
+          });
         }
-        console.log(msg);
-        res.redirect('/profile');
       }
+      res.redirect('/profile');
     })
   });
 
@@ -70,7 +67,7 @@ module.exports = function(app) {
 function isLoggedIn(req, res, next) {
 
     // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
+    if (req.isAuthenticated() && req.session.twoFactorAuth == true)
         return next();
 
     // if they aren't redirect them to the home page
