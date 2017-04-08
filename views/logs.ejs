@@ -29,7 +29,7 @@
                 <tr>
                   <td><%= log.message %></td>
                   <td><%= log.ip %></td>
-                  <td><%= log.user.username %></td>
+                  <td><%= (log.user) ? log.user.username : '' %></td>
                   <td><%= log.created_at.toLocaleString() %></td>
                 </tr>
               <% }) %>
