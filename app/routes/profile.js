@@ -13,7 +13,12 @@ module.exports = function(app) {
   // we will want this protected so you have to be logged in to visit
   // we will use route middleware to verify this (the isLoggedIn function)
   router.get('/', isLoggedIn, function(req, res) {
-      res.render('profile.ejs');
+    let Settings = mongoose.model("SecuritySettings");
+    Settings.findOne().then((settings) => {
+        res.render('profile', { passRules: settings.passwordRules });
+    }).catch((err) => {
+      res.render('index', { result: JSON.stringify(err) });
+    });
   });
 
   router.post('/password', isLoggedIn, function(req, res) {
@@ -35,7 +40,7 @@ module.exports = function(app) {
           user_agent: req.headers['user-agent']
         }).save();
       } else if (valPassword !== newPassword) {
-        req.flash('message', { 
+        req.flash('message', {
           text: 'The new password and validation password doesnt match.',
           type: 'warning'
         });
@@ -48,7 +53,7 @@ module.exports = function(app) {
           user.password = user.hashPassword(newPassword);
           user.save().catch((err) => {
           });
-          req.flash('message', { 
+          req.flash('message', {
             text: 'Success! Your password has been changed.',
             type: 'success'
           });
@@ -59,8 +64,8 @@ module.exports = function(app) {
             user_agent: req.headers['user-agent']
           }).save();
         } else {
-          req.flash('message', { 
-            text: 'Your new password must not be the same as one of your old passwords.', 
+          req.flash('message', {
+            text: 'Your new password must not be the same as one of your old passwords.',
             type: 'danger'
           });
           new Log({

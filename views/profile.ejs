@@ -57,7 +57,9 @@
             <div class="form-group">
               <label for="input-password-new1" class="col-sm-3 control-label">Enter New Password</label>
               <div class="col-sm-9">
-                <input type="password" class="form-control" id="input-password-new1" name="password_new" placeholder="New Password" required>
+                <input type="password" class="form-control" id="input-password-new1" name="password_new"
+                pattern="<%= passRules.number ? '(?=.*\\d)' : '' %><%= passRules.upperlowercase ? '(?=.*[A-Z])(?=.*[a-z])' : '' %>(?=[^?]).{<%= passRules.minlength %>,<%= passRules.maxlength %>}"
+                placeholder="New Password" required>
               </div>
             </div>
             <div class="form-group">
